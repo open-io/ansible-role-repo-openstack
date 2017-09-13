@@ -1,0 +1,9 @@
+---
+
+- name: Install and configure Openstack repository
+  hosts: all
+  become : true
+  gather_facts: true
+
+  roles:
+    - { role: repo-openstack }

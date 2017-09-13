@@ -1,0 +1,6 @@
+---
+
+- name: "Install repository configuration package for {{ ansible_distribution}} {{ ansible_distribution_major_version }}"
+  package:
+    name: "{{ openstack_package_name }}"
+    state: installed
