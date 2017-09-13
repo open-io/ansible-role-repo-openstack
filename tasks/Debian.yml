@@ -1,0 +1,6 @@
+---
+
+- name: "Configure repository for {{ ansible_distribution}} {{ ansible_distribution_release }}"
+  apt_repository:
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_distribution_release }}-updates/{{ openstack_release }} main"
+    filename: "cloudarchive-{{ openstack_release }}.list"
