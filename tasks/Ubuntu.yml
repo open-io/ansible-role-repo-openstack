@@ -9,7 +9,7 @@
     - python3-software-properties
   when: ansible_lsb.id == 'Ubuntu'
 
-- name: "Configure Openstack {{ openio_openstack_release }} release repository"
+- name: "Configure Openstack {{ openstack_release }} release repository"
   apt_repository:
     repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_lsb.codename }}-updates/pike main"
     state: present
