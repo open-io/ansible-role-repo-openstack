@@ -1,26 +1,30 @@
 ---
+- name: 'Preflight check'
+  assert:
+    that:
+      - repo_openstack_apt_repository_repo_baseurl is defined
+      - repo_openstack_apt_key_id is defined
+      - repo_openstack_apt_key_keyserver is defined
+    msg: 'repo_openstack_apt_key_id must be defined to configure repositories'
 
 - name: "Install required packages to configure repositories"
   package:
-    name: "{{ item }}"
+    name: "{{ pkg }}"
     state: present
   with_items:
     - python-software-properties
     - python3-software-properties
+  loop_control:
+    loop_var: pkg
 
 - name: "Configure Openstack {{ openstack_release }} release repository"
   apt_repository:
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu {{ ansible_lsb.codename }}-updates/pike main"
+    repo: "deb {{ repo_openstack_apt_repository_repo_baseurl }} {{ ansible_lsb.codename }}-updates/{{ openstack_release }} main"
     state: present
-    filename: 'cloudarchive-pike'
+    filename: "cloudarchive-{{ openstack_release }}"
 
 - name: "Setup repository key for Openstack repository"
   apt_key:
-    id: 5EDB1B62EC4926EA
-    keyserver: keyserver.ubuntu.com
-
-- name: "Update APT cache"
-  apt:
-    update_cache: yes
-
+    id: "{{ repo_openstack_apt_key_id }}"
+    keyserver: "{{ repo_openstack_apt_key_keyserver }}"
 ...

@@ -1,2 +1,5 @@
 ---
+repo_openstack_apt_repository_repo_baseurl: http://ubuntu-cloud.archive.canonical.com/ubuntu
+repo_openstack_apt_key_id: 5EDB1B62EC4926EA
+repo_openstack_apt_key_keyserver: keyserver.ubuntu.com
 ...
