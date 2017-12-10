@@ -27,4 +27,9 @@
   apt_key:
     id: "{{ repo_openstack_apt_key_id }}"
     keyserver: "{{ repo_openstack_apt_key_keyserver }}"
+
+- name: 'Update system cache of repositories'
+  apt:
+    update_cache: yes
+  changed_when: false
 ...
