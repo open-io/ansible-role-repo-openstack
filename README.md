@@ -26,7 +26,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: openio-repo-openstack, openstack_release: 'pike' }
+         - { role: repo-openstack, openstack_release: 'pike' }
 
 License
 -------

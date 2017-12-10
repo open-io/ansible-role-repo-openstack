@@ -22,6 +22,7 @@ IFS=$'\t\n'   # Split on newlines and tabs (but not on spaces)
 readonly container_id="$(mktemp)"
 readonly role_dir='/etc/ansible/roles/repo-openstack'
 readonly test_playbook="${role_dir}/tests/test.yml"
+readonly inventory="${role_dir}/tests/inventory"
 
 readonly docker_image="bertvv/ansible-testing"
 
@@ -59,9 +60,9 @@ configure_env() {
     'ubuntu_16.04')
       run_opts=('--volume=/run' '--volume=/run/lock' '--volume=/tmp' '--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro' '--cap-add=SYS_ADMIN' '--cap-add=SYS_RESOURCE')
 
-      #if [ -x '/usr/sbin/getenforce' ]; then
-      #  run_opts+=('--volume=/sys/fs/selinux:/sys/fs/selinux:ro')
-      #fi
+#      if [ -x '/usr/sbin/getenforce' ]; then
+#        run_opts+=('--volume=/sys/fs/selinux:/sys/fs/selinux:ro')
+#      fi
       ;;
   esac
 }
@@ -109,12 +110,12 @@ exec_container() {
 
 run_syntax_check() {
   log "Running syntax check on playbook"
-  exec_container ansible-playbook "${test_playbook}" --syntax-check
+  exec_container ansible-playbook -i "${inventory}" "${test_playbook}" --syntax-check
 }
 
 run_playbook() {
   log "Running playbook"
-  exec_container ansible-playbook "${test_playbook}" --diff
+  exec_container ansible-playbook -i "${inventory}" "${test_playbook}" --diff
   log "Run finished"
 }
 
@@ -123,7 +124,7 @@ run_idempotence_test() {
   local output
   output="$(mktemp)"
 
-  exec_container ansible-playbook "${test_playbook}" 2>&1 | tee "${output}"
+  exec_container ansible-playbook -i "${inventory}" "${test_playbook}" 2>&1 | tee "${output}"
 
   if grep -q 'changed=0.*failed=0' "${output}"; then
     result='pass'
